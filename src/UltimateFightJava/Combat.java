@@ -1,22 +1,86 @@
 package UltimateFightJava;
 
-public class Combat {
-    public static void main(String[] args) {
-        Fighters[] f = new Fighters[6];
-        f[0] = new Fighters("Pretty Boy", "France",  31, 11, 2,
-                1, 1.75f, 68.9f );
-        f[1] = new Fighters("Putscript", "Brazil",  29, 14, 2,
-                3, 1.68f, 57.8f );
-        f[2] = new Fighters("Snapshadow", "USA",  35, 12, 2,
-                1, 1.65f, 80.9f );
-        f[3] = new Fighters("Dead Code", "Australia",  28, 13, 0,
-                2, 1.93f, 81.6f );
-        f[4] = new Fighters("Ufocobol", "Brazil",  37, 5, 4,
-                3, 1.70f, 119.3f );
-        f[5] = new Fighters("Nerdaart", "USA",  30, 12, 2,
-                4, 1.81f, 105.7f );
+import java.util.Objects;
+import java.util.Random;
 
-        f[1].status();
-        f[1].introduce();
+public class Combat {
+
+    private Backstage houseChallenger, Challenged;
+    private int rounds;
+    private boolean approved;
+
+    public void scheduleFight(Backstage f0, Backstage f1) {
+        if (Objects.equals(f0.getCategory(), f1.getCategory()) && f0 != f1) {
+            this.setApproved(true);
+            this.setHouseChallenger(f0);
+            this.setChallenged(f1);
+        } else {
+            this.setApproved(false);
+            this.setHouseChallenger(null);
+            this.setChallenged(null);
+        }
+    }
+
+    public void toFight() {
+        if (this.isApproved()) {
+            this.getHouseChallenger().introduce();
+            this.getChallenged().introduce();
+
+            Random dispute = new Random();
+            int winner = dispute.nextInt(3);
+            System.out.println("--------------- FIGHT RESULT ---------------");
+            switch (winner) {
+                case 0 -> {
+                    System.out.println("Ladies and gentlemen! With a submission, \nthe House Challenger won the fight!");
+                    this.getHouseChallenger().winFight();
+                    this.getChallenged().loseFight();
+                }
+                case 1 -> {
+                    System.out.println("Ladies and gentlemen! \nThe fight was a draw!");
+                    this.getHouseChallenger().drawFight();
+                    this.getChallenged().drawFight();
+                }
+                case 2 -> {
+                    System.out.println("Ladies and gentlemen! With a knockout, \nthe Challenged won the fight!");
+                    this.getHouseChallenger().loseFight();
+                    this.getChallenged().winFight();
+                }
+            }
+            System.out.println("--------------------------------------------");
+        } else {
+            System.out.println("The fight is not valid.");
+        }
+    }
+
+    public Backstage getHouseChallenger() {
+        return houseChallenger;
+    }
+
+    public void setHouseChallenger(Backstage houseChallenger) {
+        this.houseChallenger = houseChallenger;
+    }
+
+    public Backstage getChallenged() {
+        return Challenged;
+    }
+
+    public void setChallenged(Backstage challenged) {
+        Challenged = challenged;
+    }
+
+    public int getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(int rounds) {
+        this.rounds = rounds;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 }
